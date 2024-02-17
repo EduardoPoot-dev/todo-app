@@ -5,10 +5,10 @@ import { generateId } from './helpers/index'
 function App() {
   const [theme, setTheme] = useState('')
   const [note, setNote] = useState('')
-  const [allNotes, setAllNotes] = useState([])
-  const [notes, setNotes] = useState([])
-  const [actived, setActived] = useState(false)
-  const [completed, setCompleted] = useState(false)
+  const [allNotes, setAllNotes] = useState(JSON.parse(localStorage.getItem('all-notes')) ?? [])
+  const [notes, setNotes] = useState(JSON.parse(localStorage.getItem('notes')) ?? [])
+  const [actived, setActived] = useState(JSON.parse(localStorage.getItem('actived')) ?? false)
+  const [completed, setCompleted] = useState(JSON.parse(localStorage.getItem('completed')) ?? false)
 
   //guarda el color de tema en storage
   useEffect(() => {
@@ -16,6 +16,18 @@ function App() {
       localStorage.setItem('theme', theme)
     }
   }, [theme])
+
+  //guarda el estado del modo de tareas activas y completas
+  useEffect(() => {
+    localStorage.setItem('actived', actived)
+    localStorage.setItem('completed', completed)
+  }, [actived, completed])
+
+  //guarda las notas
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes))
+    localStorage.setItem('all-notes', JSON.stringify(allNotes))
+  }, [notes, allNotes])
 
   //carga el tema por defecto
   useEffect(() => {
@@ -61,17 +73,16 @@ function App() {
 
   //muestra las notas activas
   const handleNotesActive = () => {
-    const notesActive = allNotes.filter( note => !note.checked )
+    const notesActive = allNotes.filter(note => !note.checked)
     setNotes(notesActive)
 
     setActived(true)
     setCompleted(false)
-    
   }
 
   //muestra las notas completas
   const handleNotesComplete = () => {
-    const notesCompleted = allNotes.filter( note => note.checked )
+    const notesCompleted = allNotes.filter(note => note.checked)
     setNotes(notesCompleted)
 
     setActived(false)
@@ -80,13 +91,16 @@ function App() {
 
   //elimina las notas completas
   const handleClearComplete = () => {
-    const deleteNotes = allNotes.filter( note => !note.checked )
+    const deleteNotes = allNotes.filter(note => !note.checked)
 
-    setNotes(deleteNotes)
+    //si esta en modo notas completadas...
+    if ( completed ) {
+      setNotes([])
+    } else {
+      setNotes(deleteNotes)
+    }
+
     setAllNotes(deleteNotes)
-
-    setActived(false)
-    setCompleted(false)
   }
 
   return (
@@ -116,8 +130,9 @@ function App() {
                 completed={completed}
 
                 key={note.id}
-            />
-           )})
+              />
+            )
+          })
           }
 
           <footer className="notes-footer">
@@ -126,9 +141,9 @@ function App() {
             </div>
 
             <div className="middle">
-              <button className={ !actived && !completed ? 'active' : '' } onClick={handleAllNotes}>All</button>
-              <button className={ actived ? 'active' : '' } onClick={handleNotesActive}>Active</button>
-              <button className={ completed ? 'active' : '' } onClick={handleNotesComplete}>Completed</button>
+              <button className={!actived && !completed ? 'active' : ''} onClick={handleAllNotes}>All</button>
+              <button className={actived ? 'active' : ''} onClick={handleNotesActive}>Active</button>
+              <button className={completed ? 'active' : ''} onClick={handleNotesComplete}>Completed</button>
             </div>
 
             <div className="right">

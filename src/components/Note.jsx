@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import crossIcon from '../assets/images/icon-cross.svg'
 
 const Note = ({ note, notes, setNotes, allNotes, setAllNotes, actived, completed }) => {
-    const [ isChecked, setIsChecked] = useState(false)
+    const [isChecked, setIsChecked] = useState(false)
     const { description, id } = note
 
     //actualiza el cheked de acuerdo con la info extraida
@@ -10,9 +10,21 @@ const Note = ({ note, notes, setNotes, allNotes, setAllNotes, actived, completed
         setIsChecked(note.checked)
     }, [])
 
+    //guarda el estado del modo de tareas activas y completas
+    useEffect(() => {
+        localStorage.setItem('notes', JSON.stringify(notes))
+        localStorage.setItem('all-notes', JSON.stringify(allNotes))
+    }, [notes, allNotes])
+
+    //guarda las notas
+    useEffect(() => {
+        localStorage.setItem('notes', JSON.stringify(notes))
+        localStorage.setItem('all-notes', JSON.stringify(allNotes))
+    }, [notes, allNotes])
+
     //elimina una nota 
     const handleDelete = () => {
-        const deleteNote = notes.filter( note => note.id !== id )
+        const deleteNote = notes.filter(note => note.id !== id)
         setAllNotes(deleteNote)
         setNotes(deleteNote)
     }
@@ -27,18 +39,18 @@ const Note = ({ note, notes, setNotes, allNotes, setAllNotes, actived, completed
             note.checked = true
         }
 
-        const notesUpdate = allNotes.map( noteObj => noteObj.checked === note.checked && noteObj.id === note.id ? note :  noteObj)
+        const notesUpdate = allNotes.map(noteObj => noteObj.checked === note.checked && noteObj.id === note.id ? note : noteObj)
 
         setAllNotes(notesUpdate)
 
         //actualiza las notas si estan en modo de notas activas o completas
-        if(actived) {
-            const notesActive = allNotes.filter( note => !note.checked )
+        if (actived) {
+            const notesActive = allNotes.filter(note => !note.checked)
             setNotes(notesActive)
-        } 
+        }
 
-        if(completed) {
-            const notesCompleted = allNotes.filter( note => note.checked )
+        if (completed) {
+            const notesCompleted = allNotes.filter(note => note.checked)
             setNotes(notesCompleted)
         }
     }
@@ -50,7 +62,7 @@ const Note = ({ note, notes, setNotes, allNotes, setAllNotes, actived, completed
                     <input checked={isChecked} onChange={handleChange} type="checkbox" />
                 </div>
                 <span className='check-border'></span>
-                <p>{ description }</p>
+                <p>{description}</p>
                 <div className="delete" onClick={handleDelete}>
                     <img src={crossIcon} />
                 </div>

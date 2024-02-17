@@ -289,7 +289,7 @@ main section {
 
 .notes-footer .middle button:hover,
 .notes-footer .right button:hover {
-  color: var(--white);
+  color: var(--color-text-note);
 }
 
 .middle button[class="active"],
