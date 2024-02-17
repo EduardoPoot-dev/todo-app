@@ -24,7 +24,7 @@ const Note = ({ note, notes, setNotes, allNotes, setAllNotes, actived, completed
 
     //elimina una nota 
     const handleDelete = () => {
-        const deleteNote = notes.filter(note => note.id !== id)
+        const deleteNote = allNotes.filter(note => note.id !== id)
         setAllNotes(deleteNote)
         setNotes(deleteNote)
     }
