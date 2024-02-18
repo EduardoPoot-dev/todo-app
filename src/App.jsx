@@ -58,6 +58,9 @@ function App() {
     }
 
     setAllNotes([...allNotes, noteObject])
+
+    if(completed) return
+
     setNotes([...notes, noteObject])
 
     setNote('')
@@ -103,6 +106,14 @@ function App() {
     setAllNotes(deleteNotes)
   }
 
+  //evita que al dar enter no haga las acciones por defecto de submit
+  const handleEnter = (e) => {
+    if(e.key === 'Enter') {
+      e.preventDefault()
+      return false
+    }
+  }
+
   return (
     <div className="layout" data-theme={theme}>
       <main className="main">
@@ -112,7 +123,7 @@ function App() {
         </header>
 
         <form>
-          <input id="new-note" value={note} onChange={e => setNote(e.target.value)} onBlur={handleNewNote} type="text" placeholder="Create a new Todo..." />
+          <input id="new-note" value={note} onKeyDown={handleEnter} onChange={e => setNote(e.target.value)} onBlur={handleNewNote} type="text" placeholder="Create a new Todo..." />
           <label htmlFor="new-note"></label>
         </form>
 
