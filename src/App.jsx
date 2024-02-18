@@ -40,7 +40,7 @@ function App() {
     //mensaje
     setTimeout(() => {
       window.alert('Press Enter to submit a new note')    
-    }, 100);
+    }, 500);
   }, [])
 
   //cambia el color del tema
@@ -65,12 +65,11 @@ function App() {
     }
 
     setAllNotes([...allNotes, noteObject])
+    setNote('')
 
     if(completed) return
 
     setNotes([...notes, noteObject])
-
-    setNote('')
   }
 
   //muestra todas las notas
