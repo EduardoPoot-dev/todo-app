@@ -25,8 +25,13 @@ const Note = ({ note, notes, setNotes, allNotes, setAllNotes, actived, completed
     //elimina una nota 
     const handleDelete = () => {
         const deleteNote = allNotes.filter(note => note.id !== id)
-        setAllNotes(deleteNote)
-        setNotes(deleteNote)
+
+        const confirm = window.confirm('Do you want to delete this note?')
+
+        if (confirm) {
+            setAllNotes(deleteNote)
+            setNotes(deleteNote)
+        } 
     }
 
     //guarda el estado del check 

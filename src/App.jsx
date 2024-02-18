@@ -29,13 +29,18 @@ function App() {
     localStorage.setItem('all-notes', JSON.stringify(allNotes))
   }, [notes, allNotes])
 
-  //carga el tema por defecto
+  
   useEffect(() => {
+    //carga el tema por defecto
     const storageTheme = localStorage.getItem('theme')
     const systemColorScheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
     const newTheme = storageTheme ?? systemColorScheme;
-
     setTheme(newTheme)
+
+    //mensaje
+    setTimeout(() => {
+      window.alert('Press Enter to submit a new note')    
+    }, 100);
   }, [])
 
   //cambia el color del tema
@@ -48,7 +53,9 @@ function App() {
   }
 
   //crea una nueva nota
-  const handleNewNote = () => {
+  const handleNewNote = (e) => {
+    e.preventDefault()
+
     if (note === '') return
 
     const noteObject = {
@@ -122,8 +129,8 @@ function App() {
           <div className="toggle" onClick={handleChangeTheme}></div>
         </header>
 
-        <form>
-          <input id="new-note" value={note} onKeyDown={handleEnter} onChange={e => setNote(e.target.value)} onBlur={handleNewNote} type="text" placeholder="Create a new Todo..." />
+        <form onSubmit={handleNewNote}>
+          <input id="new-note" value={note} onChange={e => setNote(e.target.value)} type="text" placeholder="Create a new Todo..." />
           <label htmlFor="new-note"></label>
         </form>
 
